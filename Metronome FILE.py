@@ -1,5 +1,4 @@
 from tkinter import *
-from os import system
 import time
 import subprocess
 import threading
@@ -11,13 +10,13 @@ def temp():
     pass
 BPM = 100
 subDivBPM = 100
-timeBefore = 0.0
-timeNow = 0.0
-numTap = 0
+timeBefore = 0.0 #time of the previous click
+timeNow = 0.0 #variable to hold the current time
+numTap = 0 #variable to keep track of number of taps done
 retrievedTime = 0.0
 actualDifference = 0.0
-recordingTaps = False
-metronomeOn = False
+recordingTaps = False #is set to True when recording the intervals between clicks
+metronomeOn = False #is set to True when beeps start
 t = threading.Timer(60.0/BPM, temp) #this object is the object that helps run code after a certain time
 subDivideT = threading.Timer(60.0/BPM, temp) #this object is the object that helps run code after a certain time (for subdividing)
 subDivideCount = 1 #this helps keep track of which subdivided beats to play
@@ -41,7 +40,7 @@ title.pack(side = "top")
 
 
 #-----------------------------------Click and Other Functions--------------------------------------#
-def recalculateSubDiv():
+def recalculateSubDiv(): #this function helps recalculate the subdivision BPM everytime the tempo is adjusted
     global BPM
     global subDivBPM
     global subDivideType
@@ -102,10 +101,10 @@ def setTempo(input):
     recalculateSubDiv()
 
 
-def playMetronome():
+def playMetronome(): #this function is repeatedly ran when the metronome beaper is turned on
     global BPM
-    global t
-    global subDivideCount
+    global t #this object is the object that helps run code after a certain time
+    global subDivideCount #this variable keeps track of which offbeat the computer is currently on
     global subDivBPM
     t = threading.Timer(60.0/subDivBPM, playMetronome) #instantiate the timer. setting it so it calls playMetronome to play the sound
     t.start() #starts the timer that runs in the background.
@@ -135,6 +134,8 @@ def playMetronome():
 
 
 #------------------Functions for Subdividing------------------#
+
+#all functions in this section are activated when a subdivision button is pressed
 def quarterClick(event):
     global BPM
     global subDivBPM
@@ -200,7 +201,7 @@ startCanvas = Canvas(mainFrame, width=250, height=25, bg="green")
 startCanvas.pack()
 textId = startCanvas.create_text(125,13, fill="darkslategray", font = "none 11 bold", text="START")
 
-#click function for starting metronome
+#click function for turning on the metronome
 def click5(event):
     global metronomeOn
     metronomeOn = not metronomeOn
